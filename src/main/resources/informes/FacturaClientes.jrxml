@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="FacturaClientes" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
+
+    <style name="Title" forecolor="#FFFFFF" fontName="SansSerif" fontSize="26" isBold="true"/>
+    <style name="SubTitle" forecolor="#666666" fontName="SansSerif" fontSize="14"/>
+    <style name="ColumnHeader" forecolor="#FFFFFF" backcolor="#006699" fontName="SansSerif" fontSize="12" isBold="true">
+        <box leftPadding="5" rightPadding="5"/>
+    </style>
+    <style name="Detail" fontName="SansSerif" fontSize="12"/>
+
+    <subDataset name="HistorialConsumo" uuid="11111111-2222-3333-4444-555555555555">
+        <parameter name="ID_CLIENTE_SUB" class="java.lang.Integer"/>
+        <parameter name="FECHA_ACTUAL_SUB" class="java.lang.String"/>
+        <queryString>
+            <![CDATA[
+            SELECT * FROM (
+                SELECT f.periodo_inicio, SUM(d.consumo_kwh) as total_factura, f.fecha_emision
+                FROM FACTURA f
+                JOIN DETALLE_FACTURA d ON f.id_factura = d.id_factura
+                WHERE f.id_cliente = $P{ID_CLIENTE_SUB}
+                  AND f.fecha_emision <= $P{FECHA_ACTUAL_SUB}
+                GROUP BY f.id_factura
+                ORDER BY f.fecha_emision DESC
+                LIMIT 12
+            ) sub
+            ORDER BY sub.fecha_emision ASC
+            ]]>
+        </queryString>
+        <field name="periodo_inicio" class="java.lang.String"/>
+        <field name="total_factura" class="java.lang.Double"/>
+    </subDataset>
+
+    <parameter name="ParametroIDFactura" class="java.lang.Integer"/>
+
+    <queryString>
+        <![CDATA[
+        SELECT c.nombre, c.apellidos, c.nif, c.direccion,
+               f.id_cliente, f.id_factura, f.fecha_emision, f.periodo_inicio, f.periodo_fin,
+               d.tramo, d.consumo_kwh, d.precio_kwh,
+               (d.consumo_kwh * d.precio_kwh) as importe_tramo
+        FROM FACTURA f
+        JOIN CLIENTE c ON f.id_cliente = c.id_cliente
+        JOIN DETALLE_FACTURA d ON f.id_factura = d.id_factura
+        WHERE f.id_factura = $P{ParametroIDFactura}
+        ]]>
+    </queryString>
+
+    <field name="nombre" class="java.lang.String"/>
+    <field name="apellidos" class="java.lang.String"/>
+    <field name="nif" class="java.lang.String"/>
+    <field name="direccion" class="java.lang.String"/>
+    <field name="id_cliente" class="java.lang.Integer"/>
+    <field name="id_factura" class="java.lang.Integer"/>
+    <field name="fecha_emision" class="java.lang.String"/>
+    <field name="periodo_inicio" class="java.lang.String"/>
+    <field name="periodo_fin" class="java.lang.String"/>
+    <field name="tramo" class="java.lang.String"/>
+    <field name="consumo_kwh" class="java.lang.Double"/>
+    <field name="precio_kwh" class="java.lang.Double"/>
+    <field name="importe_tramo" class="java.lang.Double"/>
+
+    <variable name="TotalFactura" class="java.lang.Double" calculation="Sum">
+        <variableExpression><![CDATA[$F{importe_tramo}]]></variableExpression>
+    </variable>
+
+    <title>
+        <band height="120" splitType="Stretch">
+            <rectangle>
+                <reportElement x="-20" y="-20" width="595" height="100" backcolor="#006699" uuid="a1b2c3d4-e5f6-4a1b-a2c3-d4e5f6a1b2c3"/>
+                <graphicElement><pen lineWidth="0.0"/></graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement style="Title" x="0" y="-10" width="300" height="40" uuid="b1c2d3e4-f5a6-4b2c-b3d4-e5f6a1b2c3d4"/>
+                <text><![CDATA[ElectriCity S.A.]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="SubTitle" x="0" y="30" width="300" height="20" forecolor="#E6E6E6" uuid="c1d2e3f4-a5b6-4c3d-c4e5-f6a1b2c3d4e5"/>
+                <text><![CDATA[Energía inteligente para tu hogar]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="350" y="0" width="200" height="20" forecolor="#FFFFFF" uuid="d1e2f3a4-b5c6-4d4e-d5f6-a1b2c3d4e5f6"/>
+                <textElement textAlignment="Right"><font size="14" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA["FACTURA Nº: " + $F{id_factura}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="350" y="25" width="200" height="20" forecolor="#E6E6E6" uuid="e1f2a3b4-c5d6-4e5f-e6a1-b2c3d4e5f6a1"/>
+                <textElement textAlignment="Right"><font size="12"/></textElement>
+                <textFieldExpression><![CDATA["Emisión: " + $F{fecha_emision}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="350" y="45" width="200" height="20" forecolor="#E6E6E6" uuid="f1a2b3c4-d5e6-4f6a-f7b2-c3d4e5f6a1b2"/>
+                <textElement textAlignment="Right"><font size="10" isItalic="true"/></textElement>
+                <textFieldExpression><![CDATA["Periodo: " + $F{periodo_inicio} + " a " + $F{periodo_fin}]]></textFieldExpression>
+            </textField>
+            <rectangle>
+                <reportElement x="0" y="85" width="555" height="30" backcolor="#F2F2F2" uuid="a2b3c4d5-e6f7-4a8b-a9c0-d1e2f3a4b5c6"/>
+                <graphicElement><pen lineWidth="0.0"/></graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="10" y="90" width="60" height="20" forecolor="#006699" uuid="b2c3d4e5-f6a7-4b9c-b0d1-e2f3a4b5c6d7"/>
+                <textElement verticalAlignment="Middle"><font isBold="true"/></textElement>
+                <text><![CDATA[TITULAR:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="70" y="90" width="250" height="20" uuid="c2d3e4f5-a6b7-4c0d-c1e2-f3a4b5c6d7e8"/>
+                <textElement verticalAlignment="Middle"><font size="11"/></textElement>
+                <textFieldExpression><![CDATA[$F{nombre} + " " + $F{apellidos}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="350" y="90" width="40" height="20" forecolor="#006699" uuid="d2e3f4a5-b6c7-4d1e-d2f3-a4b5c6d7e8f9"/>
+                <textElement verticalAlignment="Middle"><font isBold="true"/></textElement>
+                <text><![CDATA[NIF:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="390" y="90" width="150" height="20" uuid="e2f3a4b5-c6d7-4e2f-e3a4-b5c6d7e8f9a0"/>
+                <textElement verticalAlignment="Middle"><font size="11"/></textElement>
+                <textFieldExpression><![CDATA[$F{nif}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="30" splitType="Stretch">
+            <staticText>
+                <reportElement style="ColumnHeader" x="0" y="0" width="138" height="30" uuid="f2a3b4c5-d6e7-4f3a-f4b5-c6d7e8f9a0b1"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[TRAMO]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="ColumnHeader" x="138" y="0" width="138" height="30" uuid="a3b4c5d6-e7f8-4a4b-a5c6-d7e8f9a0b1c2"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[CONSUMO (kWh)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="ColumnHeader" x="276" y="0" width="138" height="30" uuid="b3c4d5e6-f7a8-4b5c-b6d7-e8f9a0b1c2d3"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[PRECIO UNIT.]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="ColumnHeader" x="414" y="0" width="141" height="30" uuid="c3d4e5f6-a7b8-4c6d-c7e8-f9a0b1c2d3e4"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[IMPORTE]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="25" splitType="Stretch">
+            <rectangle>
+                <reportElement x="0" y="0" width="555" height="25" backcolor="#F8F8F8" uuid="e3f4a5b6-c7d8-4e8f-e9a0-b1c2d3e4f5a6">
+                    <printWhenExpression><![CDATA[$V{REPORT_COUNT}%2 != 0]]></printWhenExpression>
+                </reportElement>
+                <graphicElement><pen lineWidth="0.0"/></graphicElement>
+            </rectangle>
+            <textField>
+                <reportElement x="10" y="0" width="128" height="25" uuid="f3a4b5c6-d7e8-4f9a-f0b1-c2d3e4f5a6b7"/>
+                <textElement verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{tramo}.toUpperCase()]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="138" y="0" width="138" height="25" uuid="a4b5c6d7-e8f9-4a0b-a1c2-d3e4f5a6b7c8"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{consumo_kwh}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.000 €">
+                <reportElement x="276" y="0" width="138" height="25" uuid="b4c5d6e7-f8a9-4b1c-b2d3-e4f5a6b7c8d9"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{precio_kwh}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00 €">
+                <reportElement x="414" y="0" width="131" height="25" uuid="c4d5e6f7-a8b9-4c2d-c3e4-f5a6b7c8d9e0"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"><font isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{importe_tramo}]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement x="0" y="24" width="555" height="1" forecolor="#CCCCCC" uuid="d4e5f6a7-b8c9-4d3e-d4f5-a6b7c8d9e0f1"/>
+            </line>
+        </band>
+    </detail>
+
+    <summary>
+        <band height="350" splitType="Stretch">
+            <rectangle>
+                <reportElement x="350" y="20" width="205" height="40" backcolor="#E6E6E6" uuid="e4f5a6b7-c8d9-4e4f-e5a6-b7c8d9e0f1a2"/>
+                <graphicElement><pen lineWidth="0.0"/></graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="360" y="20" width="100" height="40" forecolor="#006699" uuid="f4a5b6c7-d8e9-4f5a-f6b7-c8d9e0f1a2b3"/>
+                <textElement verticalAlignment="Middle"><font size="14" isBold="true"/></textElement>
+                <text><![CDATA[TOTAL A PAGAR:]]></text>
+            </staticText>
+            <textField pattern="#,##0.00 €">
+                <reportElement x="430" y="20" width="120" height="40" forecolor="#000000" uuid="a5b6c7d8-e9f0-4a1b-a2c3-d4e5f6a7b8c9"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle"><font size="18" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$V{TotalFactura}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="0" y="80" width="555" height="20" forecolor="#006699" uuid="b5c6d7e8-f9a0-4b2c-b3d4-e5f6a7b8c9d0"/>
+                <textElement textAlignment="Center"><font size="12" isBold="true" isUnderline="false"/></textElement>
+                <text><![CDATA[HISTORIAL (ÚLTIMOS 12 MESES) vs FACTURA ACTUAL]]></text>
+            </staticText>
+
+            <barChart>
+                <chart evaluationTime="Report">
+                    <reportElement x="0" y="110" width="270" height="200" uuid="c5d6e7f8-a9b0-4c3d-c4e5-f6a7b8c9d0e1"/>
+                    <chartTitle color="#006699">
+                        <titleExpression><![CDATA["Evolución del Consumo"]]></titleExpression>
+                    </chartTitle>
+                    <chartSubtitle/>
+                    <chartLegend position="Bottom"/>
+                </chart>
+
+                <categoryDataset>
+                    <dataset>
+                        <datasetRun subDataset="HistorialConsumo" uuid="99999999-8888-7777-6666-555555555555">
+                            <datasetParameter name="ID_CLIENTE_SUB">
+                                <datasetParameterExpression><![CDATA[$F{id_cliente}]]></datasetParameterExpression>
+                            </datasetParameter>
+                            <datasetParameter name="FECHA_ACTUAL_SUB">
+                                <datasetParameterExpression><![CDATA[$F{fecha_emision}]]></datasetParameterExpression>
+                            </datasetParameter>
+                            <connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+                        </datasetRun>
+                    </dataset>
+
+                    <categorySeries>
+                        <seriesExpression><![CDATA["kWh Consumido"]]></seriesExpression>
+                        <categoryExpression><![CDATA[new java.text.SimpleDateFormat("MMM yy", new java.util.Locale("es", "ES")).format(new java.text.SimpleDateFormat("yyyy-MM-dd").parse($F{periodo_inicio})).toUpperCase()]]></categoryExpression>
+                        <valueExpression><![CDATA[$F{total_factura}]]></valueExpression>
+                    </categorySeries>
+                </categoryDataset>
+
+                <barPlot>
+                    <plot orientation="Vertical" labelRotation="-45.0"/>
+                    <itemLabel/>
+                    <categoryAxisFormat>
+                        <axisFormat>
+                            <tickLabelFont>
+                                <font size="8" isBold="true"/>
+                            </tickLabelFont>
+                        </axisFormat>
+                    </categoryAxisFormat>
+                    <valueAxisFormat>
+                        <axisFormat/>
+                    </valueAxisFormat>
+                </barPlot>
+            </barChart>
+
+            <pieChart>
+                <chart evaluationTime="Report">
+                    <reportElement x="280" y="110" width="275" height="180" uuid="d5e6f7a8-b9c0-4d1e-d2f3-a4b5c6d7e8f9"/>
+                    <chartTitle color="#006699">
+                        <titleExpression><![CDATA["Coste Actual"]]></titleExpression>
+                    </chartTitle>
+                    <chartSubtitle/>
+                    <chartLegend position="Right"/>
+                </chart>
+                <pieDataset>
+                    <keyExpression><![CDATA[$F{tramo}]]></keyExpression>
+                    <valueExpression><![CDATA[$F{importe_tramo}]]></valueExpression>
+                    <labelExpression><![CDATA[$F{tramo} + "\n" + String.format("%.2f €", $F{importe_tramo})]]></labelExpression>
+                </pieDataset>
+                <piePlot isCircular="true">
+                    <plot/>
+                    <itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+                </piePlot>
+            </pieChart>
+
+            <line>
+                <reportElement x="0" y="310" width="555" height="1" forecolor="#006699" uuid="e5f6a7b8-c9d0-4e1f-e2a3-b4c5d6e7f8a9"/>
+            </line>
+            <staticText>
+                <reportElement x="0" y="315" width="555" height="30" forecolor="#999999" uuid="f5a6b7c8-d9e0-4f1a-f2b3-c4d5e6f7a8b9"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font size="8"/></textElement>
+                <text><![CDATA[ElectriCity S.A. - Calle de la Energía, 123 - 28000 Madrid - CIF: A12345678
+Gracias por confiar en nosotros. Para cualquier reclamación contacte con att-cliente@electricity.es]]></text>
+            </staticText>
+        </band>
+    </summary>
+</jasperReport>
