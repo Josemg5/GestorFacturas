@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Manual de Usuario</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #333; padding: 20px; background-color: #fdfdfd; }
+        h1 { color: #d35400; border-bottom: 3px solid #e67e22; padding-bottom: 10px; text-align: center; }
+        h2 { color: #e67e22; margin-top: 40px; border-left: 5px solid #e67e22; padding-left: 10px; }
+        h3 { color: #16a085; margin-top: 25px; }
+        p { margin-bottom: 15px; text-align: justify; }
+        .seccion { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; border: 1px solid #eee; }
+        ul, ol { margin-left: 20px; }
+        li { margin-bottom: 8px; }
+        .nota { background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; border: 1px solid #ffeeba; font-size: 0.9em; }
+        footer { text-align: center; margin-top: 50px; font-size: 0.8em; color: #777; border-top: 1px solid #ddd; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Manual de Usuario Detallado</h1>
+
+<div class="seccion">
+    <h2>Instrucciones: Clientes</h2>
+
+    <h3>Alta de nuevo cliente</h3>
+    <ol>
+        <li>Introduzca el <strong>Nombre</strong> y <strong>Apellidos</strong> en los campos superiores.</li>
+        <li>Introduzca el <strong>NIF</strong> (debe contener 8 números y una letra final).</li>
+        <li>Pulse el botón verde <strong>Guardar</strong>.</li>
+    </ol>
+
+    <h3>Modificar datos</h3>
+    <p>Si ha cometido un error, seleccione al cliente en la tabla inferior. Sus datos se cargarán automáticamente en los campos de texto. Edite lo que necesite y pulse el botón naranja <strong>Modificar</strong>.</p>
+
+    <div class="nota">
+        <strong>⚠ Importante:</strong> El NIF es un identificador único. No puede haber dos clientes con el mismo NIF en el sistema.
+    </div>
+</div>
+
+<div class="seccion">
+    <h2>Instrucciones: Facturación</h2>
+    <ul>
+        <li><strong>Selección de Cliente:</strong> Use el desplegable superior.</li>
+        <li><strong>Fechas:</strong> Seleccione fecha de emisión e inicio/fin de periodo.</li>
+        <li><strong>Detalles de Consumo:</strong> Rellene los campos Punta, Llano y Valle.</li>
+    </ul>
+    <p>Al pulsar <strong>GUARDAR FACTURA</strong>, obtendrá el ID del documento.</p>
+</div>
+
+<div class="seccion">
+    <h2>Instrucciones: Imprimir</h2>
+    <ol>
+        <li>Seleccione el <strong>Cliente</strong>.</li>
+        <li>Seleccione la <strong>Factura</strong>.</li>
+        <li>Haga clic en <strong>Descargar PDF</strong>.</li>
+    </ol>
+</div>
+
+<div class="seccion">
+    <h2>Documentación Técnica</h2>
+    <p>
+        <a href="javadoc/index.html" style="background: #e67e22; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            Abrir Javadoc (Guía de Referencia)
+        </a>
+    </p>
+</div>
+
+<footer>
+    <p>ElectroFactura v1.0 - Manual de Usuario</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.web.WebView?>
+
+
+<TabPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.jose_pr51.controller.MainController">
+    <tabs>
+        <Tab text="Gestión Clientes">
+            <SplitPane dividerPositions="0.3">
+                <VBox spacing="10" alignment="TOP_CENTER">
+                    <padding><Insets top="20" right="10" bottom="10" left="10"/></padding>
+                    <Label text="Datos Cliente" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="txtNombre" promptText="Nombre"/>
+                    <TextField fx:id="txtApellidos" promptText="Apellidos"/>
+                    <TextField fx:id="txtNif" promptText="NIF"/>
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button text="Guardar" onAction="#onGuardarClienteClick" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                        <Button text="Modificar" onAction="#onModificarClienteClick" style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
+                        <Button text="Eliminar" onAction="#onEliminarClienteClick" style="-fx-background-color: #F44336; -fx-text-fill: white;"/>
+                    </HBox>
+                </VBox>
+                <TableView fx:id="tablaClientes">
+                    <columns>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                        <TableColumn fx:id="colNombre" text="Nombre" prefWidth="100"/>
+                        <TableColumn fx:id="colApellidos" text="Apellidos" prefWidth="150"/>
+                        <TableColumn fx:id="colNif" text="NIF" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </SplitPane>
+        </Tab>
+
+        <Tab text="Alta Factura">
+            <VBox spacing="15" alignment="TOP_CENTER">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                <Label text="1. Selecciona Cliente" style="-fx-font-weight: bold;"/>
+                <ComboBox fx:id="comboClientesFactura" promptText="Elige un cliente..." prefWidth="300"/>
+
+                <Separator/>
+
+                <Label text="2. Fechas de Facturación" style="-fx-font-weight: bold;"/>
+                <HBox spacing="15" alignment="CENTER">
+                    <VBox><Label text="F. Emisión"/><DatePicker fx:id="dpEmision"/></VBox>
+                    <VBox><Label text="Inicio Periodo"/><DatePicker fx:id="dpInicio"/></VBox>
+                    <VBox><Label text="Fin Periodo"/><DatePicker fx:id="dpFin"/></VBox>
+                </HBox>
+
+                <Separator/>
+
+                <Label text="3. Detalles de Consumo" style="-fx-font-weight: bold;"/>
+                <GridPane hgap="10" vgap="10" alignment="CENTER">
+                    <Label text="Tramo" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+                    <Label text="Consumo (kWh)" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+                    <Label text="Precio (€/kWh)" GridPane.columnIndex="2" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+
+                    <Label text="PUNTA" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <TextField fx:id="txtConsumoPunta" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <TextField fx:id="txtPrecioPunta" text="0.25" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+
+                    <Label text="LLANO" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <TextField fx:id="txtConsumoLlano" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    <TextField fx:id="txtPrecioLlano" text="0.15" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+
+                    <Label text="VALLE" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <TextField fx:id="txtConsumoValle" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    <TextField fx:id="txtPrecioValle" text="0.08" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                </GridPane>
+
+                <Separator/>
+                <Button text="GUARDAR FACTURA" onAction="#onGuardarFacturaClick" style="-fx-font-size: 14px; -fx-background-color: #2196F3; -fx-text-fill: white;"/>
+            </VBox>
+        </Tab>
+
+        <Tab text="Imprimir PDF">
+            <VBox alignment="CENTER" spacing="20.0">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                <Label text="Generar Informe" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Label text="Selecciona el documento que quieres imprimir:" style="-fx-text-fill: #666;"/>
+
+                <VBox spacing="10" alignment="CENTER" maxWidth="300">
+                    <Label text="1. ¿De qué cliente?" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="comboClientesImprimir" promptText="Selecciona un cliente..." prefWidth="300"/>
+
+                    <Label text="2. ¿Qué factura?" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="comboFacturasImprimir" promptText="Primero elige cliente..." prefWidth="300" disable="true"/>
+                </VBox>
+
+                <Separator maxWidth="300"/>
+
+                <Button text="Descargar PDF" onAction="#onGenerarInformeClick" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;"/>
+            </VBox>
+        </Tab>
+
+        <Tab text="Análisis">
+            <VBox alignment="CENTER" spacing="20.0">
+                <Button text="Actualizar Gráfico" onAction="#onCargarAnalisisClick"/>
+                <BarChart fx:id="barChartAnalisis">
+                    <xAxis><CategoryAxis label="Tramo"/></xAxis>
+                    <yAxis><NumberAxis label="KWh Medio"/></yAxis>
+                </BarChart>
+            </VBox>
+        </Tab>
+
+        <Tab text="Ayuda">
+            <VBox alignment="CENTER">
+                <WebView fx:id="webViewAyuda" VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </Tab>
+
+        <Tab text="Manual Usuario">
+            <VBox alignment="CENTER">
+                <WebView fx:id="webViewManual" VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </Tab>
+
+    </tabs>
+</TabPane>

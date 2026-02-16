@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ayuda General</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #333; padding: 20px; background-color: #fdfdfd; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; text-align: center; }
+        h2 { color: #2980b9; margin-top: 30px; border-left: 5px solid #2980b9; padding-left: 10px; }
+        p { margin-bottom: 15px; text-align: justify; }
+        .seccion { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; border: 1px solid #eee; }
+        .tutorial { background-color: #e8f8f5; border: 1px solid #1abc9c; }
+        .paso { background-color: #fff; padding: 15px; margin-bottom: 10px; border-left: 4px solid #1abc9c; border-radius: 0 5px 5px 0; }
+        .paso strong { color: #d35400; font-size: 1.1em; }
+        code { background-color: #f1f1f1; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #c7254e; }
+        footer { text-align: center; margin-top: 50px; font-size: 0.8em; color: #777; border-top: 1px solid #ddd; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Ayuda General - ElectroFactura</h1>
+<p style="text-align: center;">Bienvenido. Aquí encontrará una visión global y primeros pasos.</p>
+
+<div class="seccion">
+    <h2>1. Gestión de Clientes</h2>
+    <p>El módulo de clientes es el corazón de la aplicación. Desde aquí podrá administrar la base de datos de usuarios a los que se les emitirán facturas.</p>
+</div>
+
+<div class="seccion">
+    <h2>2. Alta de Facturas</h2>
+    <p>En esta pestaña se generan los cobros. El sistema está diseñado para calcular automáticamente los importes basándose en tres tramos horarios de discriminación horaria.</p>
+</div>
+
+<div class="seccion">
+    <h2>3. Impresión y PDF</h2>
+    <p>Módulo destinado a la generación de documentos profesionales listos para enviar al cliente o imprimir en formato físico.</p>
+</div>
+
+<div class="seccion tutorial">
+    <h2>🎓 Tutorial: Mi Primera Factura</h2>
+    <p>Siga estos pasos para completar el ciclo completo de trabajo por primera vez:</p>
+
+    <div class="paso">
+        <strong>Paso 1: Crear el Cliente</strong><br>
+        Vaya a la pestaña "Gestión Clientes". Introduzca: <code>Juan</code>, <code>Pérez</code>, NIF <code>12345678Z</code> y pulse <strong>Guardar</strong>.
+    </div>
+
+    <div class="paso">
+        <strong>Paso 2: Datos de Consumo</strong><br>
+        Vaya a "Alta Factura". Seleccione a "Juan Pérez". En consumo ponga: Punta <code>100</code>, Llano <code>50</code>, Valle <code>200</code>. Pulse <strong>Guardar Factura</strong>.
+    </div>
+
+    <div class="paso">
+        <strong>Paso 3: Visualizar Resultados</strong><br>
+        Vaya a "Análisis" y pulse <strong>Actualizar Gráfico</strong>.
+    </div>
+
+    <div class="paso">
+        <strong>Paso 4: Obtener Documento</strong><br>
+        Vaya a "Imprimir PDF", seleccione a Juan y su factura, y obtenga el archivo final.
+    </div>
+</div>
+
+<footer>
+    <p>ElectroFactura v1.0 - Desarrollado por Jose_Pr51</p>
+</footer>
+
+</body>
+</html>
